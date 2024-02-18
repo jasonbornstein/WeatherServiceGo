@@ -1,0 +1,57 @@
+<html lang="en">
+    <head>
+        <title>WeatherService in Go</title>
+    </head>
+    <body style="margin: auto; max-width: 500px;">
+        <h1>WeatherService</h1>
+
+        {{ if .APIKey }}
+            {{ if .error }}<b style="color: red;">{{ .error }}</b><br>{{ end }}
+            Enter a latitude and longitude or choose a location from the list below:<br>
+            <script lang="JavaScript">
+                function clearPhoto() {
+                    document.getElementById("photo").options[0].selected = true;
+                }
+                function clearLocation() {
+                    document.getElementById("lat").value = "";
+                    document.getElementById("lon").value = "";
+                }
+            </script>
+            {{ $reqLat := .coordinates.Latitude }}
+            {{ $reqLon := .coordinates.Longitude }}
+            {{ $reqPhoto := .photo }}
+            <form id="coordinates" action="http://localhost:8080" method="GET">
+                <label for="lat">Latitude (between -90 and 90)</label> <input type="text" id="lat" name="Latitude" {{ if $reqLat }} value="{{ $reqLat }}"{{ end }} onChange="clearPhoto();"><br>
+                <label for="lon">Longitude (between -180 and 180)</label> <input type="text" id="lon" name="Longitude" {{ if $reqLon }} value="{{ $reqLon }}"{{ end }} onChange="clearPhoto();"><br>
+                <br>
+                <label for="photo">Or select a location to see its current weather, and get a surprise.</label><br>
+                <select id="photo" name="photo" onChange="clearLocation();">
+                    <option value="-1"></option>
+                    {{ range $indx, $location := .locations }}
+                        <option value="{{ $indx }}" {{ if and ($reqLat) ($reqLon) (eq $location.Coordinates.Latitude $reqLat) (eq $location.Coordinates.Longitude $reqLon) }}selected{{ end }}>{{ $location.Coordinates.Latitude }}, {{ $location.Coordinates.Longitude }}</option>
+                    {{ end }}
+                </select>
+                <br>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+
+            {{ if .display }}
+                <h2>Weather at <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ .display.Location.Latitude }},{{ .display.Location.Longitude }}">{{ if ne .display.Location.LatitudeDescription 0.0 }}{{ .display.Location.LatitudeDescription }}&deg;{{ end }}{{ .display.Location.LatitudeDirection }}, {{ if ne .display.Location.LongitudeDescription 0.0 }}{{ .display.Location.LongitudeDescription }}&deg;{{ end }}{{ .display.Location.LongitudeDirection }}</a></h2>
+                The weather is {{ .display.Description }}.
+                <br>Temperature is {{ .display.Temperature.Degrees }}&deg; {{ .display.Temperature.Units }}. <b>{{ .display.Temperature.Description }}</b>
+                <br>It feels like {{ .display.Temperature.FeelsLike }}&deg; {{ .display.Temperature.Units }}.
+                <br>Humidity is {{ .display.Humidity.Percentage }}%. <b>{{ .display.Humidity.Description }}</b>
+                <br>Wind is <b>{{ .display.Wind.Direction }}</b> ({{ .display.Wind.Degrees }}&deg;) at {{ .display.Wind.Speed }} {{ .display.Wind.Units }}. <b>{{ .display.Wind.Description }}</b>
+                <br>
+                <br>
+                {{ if .display.Location.Photo }}
+                    This photo was taken at this location.<br>The conditions posted are the <b>current</b> conditions.<br>
+                    <a data-flickr-embed="true" data-header="false" data-footer="true" href="{{ .display.Location.PhotoURL }}" title="{{ .display.Location.ImgTitle }}"><img src="{{ .display.Location.ImgURL }}" width="400" height="225" alt="{{ .display.Location.ImgTitle }}"/></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
+                {{ end }}
+            {{ end }}
+        {{ else }}
+            <b style="color: red;">Please enter your api_key in config.yaml.</b>
+        {{ end }}
+    </body>
+</html>
