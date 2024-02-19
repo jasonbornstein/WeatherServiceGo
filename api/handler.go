@@ -98,6 +98,7 @@ func SetupRouter(conf config.Config) *gin.Engine {
 			weatherDisplay.Humidity = display.CreateDisplayHumidity(weatherResp.Main.Humidity)
 			weatherDisplay.Wind = display.CreateDisplayWind(weatherResp.Wind.Speed, weatherResp.Wind.Degrees, weatherReq.Units)
 			weatherDisplay.Location = display.CreateDisplayLocation(weatherReq.Latitude, weatherReq.Longitude)
+			weatherDisplay.Clouds = weatherResp.Clouds.All
 
 			data["display"] = weatherDisplay
 		}

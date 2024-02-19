@@ -6,7 +6,7 @@ The API can be found here: https://openweathermap.org/api. Even though most of t
 Once you’ve coded your project, add it to a publicly accessible Github repository and share it with the team.  Additionally, please don’t add your API Key to the project.  Each member of the team reviewing your code has their own key to use for testing your project.
 
 # How to run the application
-1. Put your APIKey into config.yaml
-2. run the command `go run .`
+1. Put your APIKey into config.yaml, or put it in the URL (`?APIKey=<value>`)
+2. run the program: `go run .`
 3. Visit http://localhost:8080/
 4. Enter a latitude and longitude on the web page and click the "Submit" button, or select ones of the pre-selected locations to get a little surprise.

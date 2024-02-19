@@ -21,6 +21,7 @@ type WeatherDisplay struct {
 	Humidity    Humidity
 	Wind        Wind
 	Location    Location
+	Clouds      int
 }
 
 type Temperature struct {

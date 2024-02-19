@@ -21,6 +21,7 @@
             {{ $reqLon := .coordinates.Longitude }}
             {{ $reqPhoto := .photo }}
             <form id="coordinates" action="http://localhost:8080" method="GET">
+                <input id="APIKey" name="APIKey" type="hidden" value="{{ .APIKey }}">
                 <label for="lat">Latitude (between -90 and 90)</label> <input type="text" id="lat" name="Latitude" {{ if $reqLat }} value="{{ $reqLat }}"{{ end }} onChange="clearPhoto();"><br>
                 <label for="lon">Longitude (between -180 and 180)</label> <input type="text" id="lon" name="Longitude" {{ if $reqLon }} value="{{ $reqLon }}"{{ end }} onChange="clearPhoto();"><br>
                 <br>
@@ -41,8 +42,9 @@
                 The weather is {{ .display.Description }}.
                 <br>Temperature is {{ .display.Temperature.Degrees }}&deg; {{ .display.Temperature.Units }}. <b>{{ .display.Temperature.Description }}</b>
                 <br>It feels like {{ .display.Temperature.FeelsLike }}&deg; {{ .display.Temperature.Units }}.
-                <br>Humidity is {{ .display.Humidity.Percentage }}%. <b>{{ .display.Humidity.Description }}</b>
                 <br>Wind is <b>{{ .display.Wind.Direction }}</b> ({{ .display.Wind.Degrees }}&deg;) at {{ .display.Wind.Speed }} {{ .display.Wind.Units }}. <b>{{ .display.Wind.Description }}</b>
+                <br>Humidity is {{ .display.Humidity.Percentage }}%. <b>{{ .display.Humidity.Description }}</b>
+                <br>It's {{ .display.Clouds }}% cloudy.
                 <br>
                 <br>
                 {{ if .display.Location.Photo }}
